@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Food Calorie Detector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+
+  <!-- Teachable Machine Image Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 10px;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    #webcam-container {
+      margin: 10px auto;
+    }
+    #result {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>🍽️ Food Calorie Detector</h2>
+
+  <button onclick="init()">Start Camera</button>
+
+  <div id="webcam-container"></div>
+
+  <div id="result">
+    Show food to the camera
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
