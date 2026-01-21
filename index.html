@@ -9,7 +9,7 @@
   <!-- TensorFlow.js -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 
-  <!-- Teachable Machine Image Library -->
+  <!-- Teachable Machine Image -->
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
   <style>
@@ -49,22 +49,25 @@
 <body>
   <h2>🍽️ Food Calorie Detector</h2>
 
-  <!-- Start webcam -->
   <button onclick="init()">Start Camera</button>
-
-  <!-- Capture image and predict -->
   <button onclick="capture()">Capture Photo</button>
 
-  <!-- Webcam feed -->
   <div id="webcam-container"></div>
 
-  <!-- Prediction output -->
   <div id="result">
     Click <b>Start Camera</b>, show food, then click <b>Capture Photo</b>
   </div>
 
-  <!-- App logic -->
+  <!-- Confidence bar -->
+  <div style="width: 80%; margin: 15px auto;">
+    <div style="background:#ddd; border-radius:10px; overflow:hidden;">
+      <div id="confidence-bar"
+           style="height:20px; width:0%; background:#28a745; transition: width 0.4s;">
+      </div>
+    </div>
+    <div id="confidence-text" style="margin-top:5px;"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
-
