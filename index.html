@@ -23,13 +23,13 @@
       margin-bottom: 10px;
     }
     #webcam-container {
-      margin: 10px auto;
+      margin: 15px auto;
     }
     #result {
       background: white;
       padding: 15px;
       border-radius: 10px;
-      margin-top: 10px;
+      margin-top: 15px;
       font-size: 18px;
     }
     button {
@@ -40,6 +40,7 @@
       color: white;
       border-radius: 6px;
       cursor: pointer;
+      margin: 5px;
     }
   </style>
 </head>
@@ -47,14 +48,21 @@
 <body>
   <h2>🍽️ Food Calorie Detector</h2>
 
+  <!-- Start webcam -->
   <button onclick="init()">Start Camera</button>
 
+  <!-- Capture image and predict -->
+  <button onclick="capture()">Capture Photo</button>
+
+  <!-- Webcam feed -->
   <div id="webcam-container"></div>
 
+  <!-- Prediction output -->
   <div id="result">
-    Show food to the camera
+    Click <b>Start Camera</b>, show food, then click <b>Capture Photo</b>
   </div>
 
+  <!-- App logic -->
   <script src="script.js"></script>
 </body>
 </html>
