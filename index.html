@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Food Classifier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- TensorFlow & Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    #webcam-container canvas {
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    #label-container {
+      margin-top: 15px;
+      font-size: 18px;
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      display: inline-block;
+      min-width: 220px;
+    }
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>🍽️ Food Classifier</h2>
+<button id="startBtn">Start Camera</button>
+
+<div id="webcam-container"></div>
+<div id="label-container">Waiting for camera…</div>
+
+<script>
+  // 🔴 IMPORTANT: real TM model URL (ends with /)
+  const URL = "https://teachablemachine.withgoogle.com/models/aiKJ0M-As/";
+
+  let model, webcam;
+
+  // Bind user gesture properly
+  document.getElementById("startBtn").addEventListener("click", init);
+
+  async function init() {
+    console.log("INIT CALLED");
+
+    const modelURL = URL + "model.json";
+    const metadataURL = URL + "metadata.json";
+
+    // Load model
+    model = await tmImage.load(modelURL, metadataURL);
+
+    // Setup webcam
+    webcam = new tmImage.Webcam(224, 224, true);
+    await webcam.setup();      // 🔑 camera permission happens here
+    await webcam.play();
+
+    document.getElementById("webcam-container").innerHTML = "";
+    document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+    window.requestAnimationFrame(loop);
+  }
+
+  async function loop() {
+    webcam.update();
+    await predict();
+    window.requestAnimationFrame(loop);
+  }
+
+  async function predict() {
+    const prediction = await model.predict(webcam.canvas);
+    prediction.sort((a, b) => b.probability - a.probability);
+
+    document.getElementById("label-container").innerHTML = `
+      <b>${prediction[0].className}</b><br>
+      Confidence: ${(prediction[0].probability * 100).toFixed(1)}%
+    `;
+  }
+</script>
+
+</body>
+</html>
