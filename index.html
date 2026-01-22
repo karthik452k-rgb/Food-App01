@@ -51,26 +51,29 @@
 <div id="label-container">Waiting for camera…</div>
 
 <script>
-  // 🔴 IMPORTANT: real TM model URL (ends with /)
   const URL = "https://teachablemachine.withgoogle.com/models/aiKJ0M-As/";
 
   let model, webcam;
 
-  // Bind user gesture properly
+  // 🔹 Nutrition data (per 1 standard serving)
+  const nutritionData = {
+    biriyani: { calories: 350, carbs: 45, protein: 15, fat: 12, fiber: 3, sugar: 4, sodium: 620 },
+    daltadka: { calories: 180, carbs: 18, protein: 9, fat: 6, fiber: 5, sugar: 3, sodium: 450 },
+    kachori: { calories: 250, carbs: 28, protein: 6, fat: 14, fiber: 2, sugar: 2, sodium: 380 },
+    cake: { calories: 300, carbs: 40, protein: 5, fat: 15, fiber: 1, sugar: 25, sodium: 290 },
+    gulabjamun: { calories: 175, carbs: 28, protein: 3, fat: 7, fiber: 0, sugar: 22, sodium: 45 }
+  };
+
   document.getElementById("startBtn").addEventListener("click", init);
 
   async function init() {
-    console.log("INIT CALLED");
-
     const modelURL = URL + "model.json";
     const metadataURL = URL + "metadata.json";
 
-    // Load model
     model = await tmImage.load(modelURL, metadataURL);
 
-    // Setup webcam
     webcam = new tmImage.Webcam(224, 224, true);
-    await webcam.setup();      // 🔑 camera permission happens here
+    await webcam.setup();
     await webcam.play();
 
     document.getElementById("webcam-container").innerHTML = "";
@@ -89,12 +92,32 @@
     const prediction = await model.predict(webcam.canvas);
     prediction.sort((a, b) => b.probability - a.probability);
 
-    document.getElementById("label-container").innerHTML = `
-      <b>${prediction[0].className}</b><br>
-      Confidence: ${(prediction[0].probability * 100).toFixed(1)}%
-    `;
+    const top = prediction[0];
+    const foodKey = top.className.toLowerCase().replace(/\s+/g, "");
+
+    let nutritionHTML = `<b>${top.className}</b><br>
+      Confidence: ${(top.probability * 100).toFixed(1)}%<br><br>`;
+
+    if (nutritionData[foodKey]) {
+      const n = nutritionData[foodKey];
+      nutritionHTML += `
+        <b>Nutrition (per 1 serving)</b><br>
+        Calories: ${n.calories} kcal<br>
+        Carbs: ${n.carbs} g<br>
+        Protein: ${n.protein} g<br>
+        Fat: ${n.fat} g<br>
+        Fiber: ${n.fiber} g<br>
+        Sugar: ${n.sugar} g<br>
+        Sodium: ${n.sodium} mg
+      `;
+    } else {
+      nutritionHTML += `<i>Nutrition data not available</i>`;
+    }
+
+    document.getElementById("label-container").innerHTML = nutritionHTML;
   }
 </script>
+
 
 </body>
 </html>
